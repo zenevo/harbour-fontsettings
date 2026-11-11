@@ -1,6 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="104" fill="#141b22"/>
-  <text x="256" y="322" font-family="DejaVu Sans" font-size="250" font-weight="bold"
-        fill="#ffffff" text-anchor="middle">Aa</text>
-  <rect x="118" y="382" width="276" height="20" rx="10" fill="#3fb6c8"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgb(64,224,208)"/>
+      <stop offset="0.5" stop-color="rgb(255,140,0)"/>
+      <stop offset="1" stop-color="rgb(255,0,128)"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#g)" d="M158 40
+    H362
+    C428 40 472 84 472 150
+    V420
+    C472 462 484 492 500 500
+    L376 472
+    H150
+    C84 472 40 428 40 362
+    V150
+    C40 84 84 40 158 40 Z"/>
+  <text x="248" y="330" text-anchor="middle" font-family="DejaVu Sans" font-weight="bold"
+        font-size="200" fill="#ffffff">Aa</text>
 </svg>

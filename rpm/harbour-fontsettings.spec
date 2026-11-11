@@ -1,5 +1,5 @@
 Name:       harbour-fontsettings
-Version:    0.2.0
+Version:    0.2.1
 Release:    1
 Summary:    Font manager for Sailfish OS
 License:    MIT
@@ -45,6 +45,8 @@ install -D -m 644 icons/harbour-fontsettings.svg \
 /usr/share/icons/hicolor/*/apps/harbour-fontsettings.*
 
 %changelog
+* Wed Nov 11 2026 zen <zen@localhost> - 0.2.1-1
+- New launcher icon: speech-bubble silhouette with gradient fill
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.0-1
 - Only redirect the primary family; fallbacks are the system defaults again
 * Wed Nov 11 2026 zen <zen@localhost> - 0.1.4-1
