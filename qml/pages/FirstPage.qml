@@ -10,13 +10,17 @@ Page {
 
         FilePickerPage {
             nameFilters: ["*.ttf", "*.otf", "*.ttc", "*.TTF", "*.OTF", "*.TTC"]
+            // We navigate explicitly: after picking a file the user may be
+            // several folders deep inside the picker, so pop straight back to
+            // this page instead of one level at a time.
+            popOnSelection: false
 
             onSelectedContentPropertiesChanged: {
                 var path = selectedContentProperties['filePath']
                 if (path) {
                     backend.importFont(path)
                 }
-                pageStack.pop()
+                pageStack.pop(page)
             }
         }
     }
