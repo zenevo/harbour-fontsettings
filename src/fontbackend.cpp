@@ -164,32 +164,6 @@ void FontBackend::setMono(const QString &family)
     emit selectionChanged();
 }
 
-void FontBackend::addFallback(const QString &family)
-{
-    if (family.isEmpty() || m_fallbacks.contains(family))
-        return;
-    m_fallbacks << family;
-    saveState();
-    emit fallbacksChanged();
-}
-
-void FontBackend::removeFallback(const QString &family)
-{
-    if (m_fallbacks.removeAll(family) > 0) {
-        saveState();
-        emit fallbacksChanged();
-    }
-}
-
-void FontBackend::moveFallback(int from, int to)
-{
-    if (from < 0 || from >= m_fallbacks.size() || to < 0 || to >= m_fallbacks.size() || from == to)
-        return;
-    m_fallbacks.move(from, to);
-    saveState();
-    emit fallbacksChanged();
-}
-
 bool FontBackend::importFont(const QString &path)
 {
     const QFileInfo fi(path);
@@ -258,18 +232,11 @@ QString FontBackend::buildConfig() const
 {
     const QString primary = m_primary.isEmpty() ? defaultFamily() : m_primary;
 
-    QStringList preferred;
-    preferred << primary;
-    for (const QString &f : m_fallbacks) {
-        if (f != primary && !preferred.contains(f))
-            preferred << f;
-    }
-    // Keep the stock Sailfish UI font available as a fallback instead of
-    // rejecting it: the family is what the UI asks for, so anything the chosen
-    // font lacks (CJK, symbols) can still come from it / its own fallbacks.
-    if (!preferred.contains(defaultFamily()))
-        preferred << defaultFamily();
-    preferred << QStringLiteral("emoji");
+    // Only the primary family is redirected. Everything else - CJK, emoji,
+    // symbol fallback, the stock Sail Sans Pro itself - is left to the system
+    // fontconfig configuration (/etc/fonts/local.conf and friends), exactly as
+    // if the font had never been changed.
+    const QStringList preferred{primary};
 
     QString xml;
     QTextStream s(&xml);
@@ -293,13 +260,8 @@ QString FontBackend::buildConfig() const
 
     writeAlias(QStringLiteral("Sail Sans Pro Light"), preferred);
 
-    QStringList headingPreferred;
-    headingPreferred << (m_heading.isEmpty() ? primary : m_heading);
-    for (const QString &f : preferred) {
-        if (!headingPreferred.contains(f))
-            headingPreferred << f;
-    }
-    writeAlias(QStringLiteral("Sail Sans Pro ExtraLight"), headingPreferred);
+    writeAlias(QStringLiteral("Sail Sans Pro ExtraLight"),
+               QStringList() << (m_heading.isEmpty() ? primary : m_heading));
 
     if (!m_mono.isEmpty()) {
         writeAlias(QStringLiteral("monospace"),
@@ -401,11 +363,9 @@ bool FontBackend::reset()
     m_primary.clear();
     m_heading.clear();
     m_mono.clear();
-    m_fallbacks.clear();
     saveState();
     runFcCache();
     emit selectionChanged();
-    emit fallbacksChanged();
     setMessage(ok ? QStringLiteral("已恢复系统默认字体") : QStringLiteral("恢复默认时出错"));
     return ok;
 }
@@ -425,21 +385,6 @@ void FontBackend::loadState()
     m_primary = s.value("font/primary").toString();
     m_heading = s.value("font/heading").toString();
     m_mono = s.value("font/mono").toString();
-    m_fallbacks = s.value("font/fallbacks").toStringList();
-
-    if (m_primary.isEmpty() && m_fallbacks.isEmpty() && !s.contains("font/initialised")) {
-        // First start: keep the system font, but pre-fill the CJK/emoji
-        // families this device ships so the fallback chain is not empty.
-        const QStringList available = installedFamiliesFromFc();
-        for (const QString &candidate : {QStringLiteral("WenQuanYi Zen Hei"),
-                                         QStringLiteral("Noto Color Emoji"),
-                                         QStringLiteral("Noto Emoji"),
-                                         QStringLiteral("DejaVu Sans")}) {
-            if (available.contains(candidate))
-                m_fallbacks << candidate;
-        }
-        s.setValue("font/initialised", true);
-    }
 }
 
 void FontBackend::saveState()
@@ -449,7 +394,6 @@ void FontBackend::saveState()
     s.setValue("font/primary", m_primary);
     s.setValue("font/heading", m_heading);
     s.setValue("font/mono", m_mono);
-    s.setValue("font/fallbacks", m_fallbacks);
     s.setValue("font/initialised", true);
     s.sync();
 }
@@ -474,7 +418,6 @@ int FontBackend::runCli(const QStringList &args)
         out << "primary=" << (m_primary.isEmpty() ? defaultFamily() : m_primary) << "\n";
         out << "heading=" << (m_heading.isEmpty() ? QStringLiteral("-") : m_heading) << "\n";
         out << "mono=" << (m_mono.isEmpty() ? QStringLiteral("-") : m_mono) << "\n";
-        out << "fallbacks=" << m_fallbacks.join(",") << "\n";
         out << "config=" << (configIsOurs() ? "managed"
                                             : (QFile::exists(configPath()) ? "foreign" : "none")) << "\n";
         out << "config_path=" << configPath() << "\n";
@@ -504,7 +447,6 @@ int FontBackend::runCli(const QStringList &args)
             if (opt == QLatin1String("--primary")) { m_primary = val; ++i; }
             else if (opt == QLatin1String("--heading")) { m_heading = val; ++i; }
             else if (opt == QLatin1String("--mono")) { m_mono = val; ++i; }
-            else if (opt == QLatin1String("--fallback")) { m_fallbacks << val; ++i; }
             else { err << "unknown option: " << opt << "\n"; return 2; }
         }
         const bool ok = apply();
@@ -519,6 +461,6 @@ int FontBackend::runCli(const QStringList &args)
     }
 
     err << "commands: status | list | import <file> | apply [--primary F] [--heading F] "
-           "[--mono F] [--fallback F]... | reset\n";
+           "[--mono F] | reset\n";
     return 2;
 }

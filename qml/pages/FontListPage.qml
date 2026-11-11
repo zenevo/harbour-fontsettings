@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    // "primary" | "heading" | "mono" | "fallback"
+    // "primary" | "heading" | "mono"
     property string mode: "primary"
     property string filter: ""
     property var allFamilies: backend.families
@@ -30,8 +30,7 @@ Page {
             width: listView.width
 
             PageHeader {
-                title: page.mode === "fallback" ? qsTr("添加回退字体")
-                     : page.mode === "mono"     ? qsTr("等宽字体")
+                title: page.mode === "mono"     ? qsTr("等宽字体")
                      : page.mode === "heading"  ? qsTr("标题字体")
                      : qsTr("正文字体")
             }
@@ -78,8 +77,6 @@ Page {
                     backend.heading = modelData
                 } else if (page.mode === "mono") {
                     backend.mono = modelData
-                } else {
-                    backend.addFallback(modelData)
                 }
                 pageStack.pop()
             }

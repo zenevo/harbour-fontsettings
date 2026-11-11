@@ -15,7 +15,6 @@ Sailfish OS 的系统 UI 字体管理器。导入字体、选正文字体/标题
 | 正文字体 | 全局 UI 字体（列表里带中文/符号预览） |
 | 标题字体 | 额外写 dconf `font_family_heading`，重启主屏幕后部分标题会跟随 |
 | 等宽字体 | 同时替换 `monospace` 与 `DejaVu Sans Mono`（终端、代码显示） |
-| 回退链 | 有序列表，缺字时按顺序找；支持上移/下移/删除 |
 | 应用 | 生成 fontconfig 配置 + `fc-cache -f`，可选立刻重启主屏幕 |
 | 恢复 | 删除/还原 `fonts.conf`，重置 dconf 键 |
 | 预览 | 用当前选择实时渲染中文、西文、符号 |
@@ -33,12 +32,13 @@ Sailfish 的 Silica 主题把 UI 字体写死为 `Sail Sans Pro Light`
   <family>Sail Sans Pro Light</family>
   <prefer>
     <family>你的字体</family>
-    <family>WenQuanYi Zen Hei</family>   <!-- 中文回退 -->
-    <family>emoji</family>
   </prefer>
 </alias>
-<selectfont><rejectfont><glob>/usr/share/fonts/sail-sans-pro</glob></rejectfont></selectfont>
 ```
+
+配置里**只有主字体这一项**。中文、emoji、符号、乃至 Sail Sans Pro 本身的回退，全部
+交给系统原有的 fontconfig 配置（`/etc/fonts/local.conf` 等）处理——也就是说缺字行为和
+没换字体时完全一致，不会出现两套回退链互相打架。
 
 应用会生成这份文件（带标记注释），并在需要时先把已有的 `fonts.conf` 备份成
 `fonts.conf.before-harbour-fontsettings`。
@@ -69,7 +69,6 @@ zypper in ./harbour-fontsettings-0.1.0-1.aarch64.rpm
 
 1. 打开应用 → **导入字体文件…** → 选 `.ttf/.otf/.ttc`（可以从下载目录或任意位置选）。
 2. 点 **正文字体** 选一个，列表里能直接看到中文和符号的渲染效果。
-3. 需要的话设置 **回退字体**（建议保留一个中文字体 + 一个 emoji 字体）。
 4. **应用设置** → 提示时选「立即重启」，或稍后用「重启主屏幕」。
 5. 不满意：**恢复系统默认**。
 
@@ -79,8 +78,7 @@ zypper in ./harbour-fontsettings-0.1.0-1.aarch64.rpm
 harbour-fontsettings --cli status
 harbour-fontsettings --cli list
 harbour-fontsettings --cli import ~/Downloads/Inter-Regular.ttf
-harbour-fontsettings --cli apply --primary "Inter" \
-    --fallback "WenQuanYi Zen Hei" --fallback "Noto Color Emoji"
+harbour-fontsettings --cli apply --primary "Inter"
 harbour-fontsettings --cli reset
 ```
 
@@ -108,6 +106,8 @@ mb2 -t <target> build          # 例如 mb2 -t oneplus-dumpling-aarch64 build
 
 ## 限制与已知问题
 
+- **回退不做自定义**：缺字时按系统原始 fontconfig 规则回退（Sail Sans Pro → 系统配置里的
+  中文字体/emoji），保证和未换字体时行为一致。
 - **标题字体** 走 dconf（`/desktop/sailfish/silica/font_family_heading`），只有部分界面会跟随；
   正文通过 fontconfig 生效，覆盖最广。
 - **Android 应用**（AppSupport/AlienDalvik）有独立的 fontconfig，本工具不影响。

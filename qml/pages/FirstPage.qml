@@ -108,14 +108,6 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("FontListPage.qml"), { mode: "mono" })
             }
 
-            ValueButton {
-                label: qsTr("回退字体")
-                value: backend.fallbacks.length > 0
-                       ? qsTr("%1 个").arg(backend.fallbacks.length)
-                       : qsTr("无")
-                onClicked: pageStack.push(Qt.resolvedUrl("FallbackPage.qml"))
-            }
-
             SectionHeader {
                 text: qsTr("操作")
             }
@@ -132,7 +124,7 @@ Page {
                 width: parent.width - 2 * Theme.horizontalPageMargin
                 text: qsTr("应用设置")
                 enabled: backend.primary.length > 0 || backend.heading.length > 0
-                         || backend.mono.length > 0 || backend.fallbacks.length > 0
+                         || backend.mono.length > 0
                 onClicked: backend.apply()
             }
 
