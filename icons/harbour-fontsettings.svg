@@ -6,16 +6,8 @@
       <stop offset="1" stop-color="rgb(255,0,128)"/>
     </linearGradient>
   </defs>
-  <path fill="url(#g)" d="M158 40
-    H362
-    C428 40 472 84 472 150
-    V420
-    C472 462 484 492 500 500
-    L376 472
-    H150
-    C84 472 40 428 40 362
-    V150
-    C40 84 84 40 158 40 Z"/>
-  <text x="248" y="330" text-anchor="middle" font-family="DejaVu Sans" font-weight="bold"
-        font-size="200" fill="#ffffff">Aa</text>
+  <path fill="url(#g)" d="M190 0 H322 A190 190 0 0 1 512 190 V322 A190 190 0 0 1 322 512
+      H10 A10 10 0 0 1 0 502 V190 A190 190 0 0 1 190 0 Z"/>
+  <text x="256" y="335" text-anchor="middle" font-family="DejaVu Sans" font-weight="bold"
+        font-size="210" fill="#ffffff">Aa</text>
 </svg>
