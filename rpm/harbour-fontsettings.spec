@@ -1,5 +1,5 @@
 Name:       harbour-fontsettings
-Version:    0.1.2
+Version:    0.1.3
 Release:    1
 Summary:    Font manager for Sailfish OS
 License:    MIT
@@ -45,6 +45,8 @@ install -D -m 644 icons/harbour-fontsettings.svg \
 /usr/share/icons/hicolor/*/apps/harbour-fontsettings.*
 
 %changelog
+* Wed Nov 11 2026 zen <zen@localhost> - 0.1.3-1
+- Keep Sail Sans Pro as the final fallback; show it in the fallback page
 * Wed Nov 11 2026 zen <zen@localhost> - 0.1.2-1
 - Return to the main page after picking a font file
 * Wed Nov 11 2026 zen <zen@localhost> - 0.1.0-1

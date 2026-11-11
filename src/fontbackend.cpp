@@ -264,6 +264,11 @@ QString FontBackend::buildConfig() const
         if (f != primary && !preferred.contains(f))
             preferred << f;
     }
+    // Keep the stock Sailfish UI font available as a fallback instead of
+    // rejecting it: the family is what the UI asks for, so anything the chosen
+    // font lacks (CJK, symbols) can still come from it / its own fallbacks.
+    if (!preferred.contains(defaultFamily()))
+        preferred << defaultFamily();
     preferred << QStringLiteral("emoji");
 
     QString xml;
@@ -301,14 +306,6 @@ QString FontBackend::buildConfig() const
                    QStringList() << m_mono << QStringLiteral("emoji"));
         if (m_mono != QStringLiteral("DejaVu Sans Mono"))
             writeAlias(QStringLiteral("DejaVu Sans Mono"), QStringList() << m_mono);
-    }
-
-    if (primary != defaultFamily()) {
-        s << "  <selectfont>\n"
-             "    <rejectfont>\n"
-             "      <glob>/usr/share/fonts/sail-sans-pro</glob>\n"
-             "    </rejectfont>\n"
-             "  </selectfont>\n";
     }
 
     s << "</fontconfig>\n";

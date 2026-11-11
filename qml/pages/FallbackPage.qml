@@ -58,15 +58,24 @@ Page {
             }
         }
 
-        footer: Item {
+        footer: Column {
             width: listView.width
-            height: addButton.height + 2 * Theme.paddingLarge
+            spacing: Theme.paddingMedium
+
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                text: qsTr("最后回退：%1（系统默认，固定保留）").arg(backend.defaultFamily)
+                color: Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                wrapMode: Text.Wrap
+                topPadding: Theme.paddingMedium
+            }
 
             Button {
                 id: addButton
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("添加回退字体")
                 onClicked: pageStack.push(Qt.resolvedUrl("FontListPage.qml"), { mode: "fallback" })
             }
