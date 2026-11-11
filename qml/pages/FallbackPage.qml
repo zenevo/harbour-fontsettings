@@ -75,7 +75,8 @@ Page {
             Button {
                 id: addButton
 
-                anchors.horizontalCenter: parent.horizontalCenter
+                // Column positions children, so anchors are not allowed here.
+                x: (parent.width - width) / 2
                 text: qsTr("添加回退字体")
                 onClicked: pageStack.push(Qt.resolvedUrl("FontListPage.qml"), { mode: "fallback" })
             }
