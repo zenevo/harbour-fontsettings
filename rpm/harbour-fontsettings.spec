@@ -1,5 +1,5 @@
 Name:       harbour-fontsettings
-Version:    0.2.6
+Version:    0.3.0
 Release:    1
 Summary:    Font manager for Sailfish OS
 License:    MIT
@@ -9,6 +9,16 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(sailfishapp)
 BuildRequires:  qt5-qtdeclarative-devel
+
+# Runtime: QML modules and command line helpers the app uses.
+# The Qt/Sailfish shared libraries themselves are picked up automatically as
+# soname dependencies by rpmbuild; these cover what it cannot see.
+Requires:       sailfishsilica-qt5
+Requires:       sailfish-components-pickers-qt5
+Requires:       qt5-qtdeclarative-import-qtquick2plugin
+Requires:       qt5-qtdeclarative-import-window2
+Requires:       fontconfig
+Requires:       dconf
 
 %description
 A small Sailfish OS application to change the system UI font: import
@@ -45,6 +55,8 @@ install -D -m 644 icons/harbour-fontsettings.svg \
 /usr/share/icons/hicolor/*/apps/harbour-fontsettings.*
 
 %changelog
+* Wed Nov 11 2026 zen <zen@localhost> - 0.3.0-1
+- Declare runtime dependencies explicitly (Silica, Pickers, fontconfig, dconf)
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.6-1
 - Gradient runs bottom-left to top-right
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.5-1
