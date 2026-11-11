@@ -129,13 +129,7 @@ Page {
                 text: qsTr("应用设置")
                 enabled: backend.primary.length > 0 || backend.heading.length > 0
                          || backend.mono.length > 0 || backend.fallbacks.length > 0
-                onClicked: {
-                    if (backend.apply()) {
-                        applyDialog.open()
-                    } else {
-                        remorse.execute(backend.lastMessage)
-                    }
-                }
+                onClicked: backend.apply()
             }
 
             Button {
@@ -182,20 +176,5 @@ Page {
 
     RemorsePopup {
         id: remorse
-    }
-
-    Dialog {
-        id: applyDialog
-
-        title: qsTr("已应用")
-        text: qsTr("字体配置已保存。重启主屏幕后生效，是否现在重启？")
-        acceptText: qsTr("立即重启")
-        cancelText: qsTr("稍后")
-
-        onAccepted: {
-            if (!backend.restartHomeScreen()) {
-                remorse.execute(qsTr("重启失败，请用「设置 → 工具 → 重启主屏幕」"))
-            }
-        }
     }
 }
