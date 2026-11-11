@@ -1,5 +1,5 @@
 Name:       harbour-fontsettings
-Version:    0.2.4
+Version:    0.2.5
 Release:    1
 Summary:    Font manager for Sailfish OS
 License:    MIT
@@ -45,6 +45,8 @@ install -D -m 644 icons/harbour-fontsettings.svg \
 /usr/share/icons/hicolor/*/apps/harbour-fontsettings.*
 
 %changelog
+* Wed Nov 11 2026 zen <zen@localhost> - 0.2.5-1
+- Icon silhouette matches the qtodo launcher icon exactly (squared top-right)
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.4-1
 - Vector icon traced from the stock plate, rendered per size (crisper edges)
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.3-1
