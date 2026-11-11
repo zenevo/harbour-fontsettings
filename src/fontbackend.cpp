@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFontDatabase>
+#include <QGuiApplication>
 #include <QProcess>
 #include <QSettings>
 #include <QStandardPaths>
@@ -102,7 +103,10 @@ QString FontBackend::familyOfFile(const QString &path) const
 
 void FontBackend::refresh()
 {
-    m_families = QFontDatabase().families();
+    if (qobject_cast<QGuiApplication *>(QCoreApplication::instance()))
+        m_families = QFontDatabase().families();
+    else
+        m_families = installedFamiliesFromFc();
     m_imported.clear();
 
     QDir dir(fontDir());
@@ -264,6 +268,7 @@ QString FontBackend::buildConfig() const
 
     QString xml;
     QTextStream s(&xml);
+    s.setCodec("UTF-8");
     s << "<?xml version=\"1.0\"?>\n"
          "<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n"
          "<!-- " << kMarker << " — 由「字体设置」生成，修改会被覆盖 -->\n"
@@ -294,7 +299,8 @@ QString FontBackend::buildConfig() const
     if (!m_mono.isEmpty()) {
         writeAlias(QStringLiteral("monospace"),
                    QStringList() << m_mono << QStringLiteral("emoji"));
-        writeAlias(QStringLiteral("DejaVu Sans Mono"), QStringList() << m_mono);
+        if (m_mono != QStringLiteral("DejaVu Sans Mono"))
+            writeAlias(QStringLiteral("DejaVu Sans Mono"), QStringList() << m_mono);
     }
 
     if (primary != defaultFamily()) {
@@ -461,6 +467,8 @@ int FontBackend::runCli(const QStringList &args)
 {
     QTextStream out(stdout);
     QTextStream err(stderr);
+    out.setCodec("UTF-8");
+    err.setCodec("UTF-8");
 
     const QString cmd = args.isEmpty() ? QStringLiteral("status") : args.first();
     QStringList rest = args.mid(1);
