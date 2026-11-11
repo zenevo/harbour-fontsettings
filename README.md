@@ -97,6 +97,15 @@ mb2 -t <target> build          # 例如 mb2 -t oneplus-dumpling-aarch64 build
 
 依赖：`Qt5Quick`、`Qt5Qml`、`sailfishapp`（见 `rpm/harbour-fontsettings.spec`）。
 
+## 测试状态
+
+- **CLI 已在 qemu-aarch64 + SFOS 5.2 target 的 sysroot 下跑通**：`status` / `list` / `import` /
+  `apply` / `reset` 全部返回 0；生成的 `fonts.conf` 通过 XML 校验，`fc-match` 用这份配置
+  能把 `Sail Sans Pro Light` 解析成所选字体；用户已有的 `fonts.conf` 会被备份，`reset`
+  能原样恢复。
+- **GUI 还没有在真机上跑过**（开发时手机不在线）。QML 只做了静态检查，首次安装如果
+  界面有问题，多半是某个 Silica 属性名，报错会写进 `journalctl --user -u lipstick`。
+
 ## 限制与已知问题
 
 - **标题字体** 走 dconf（`/desktop/sailfish/silica/font_family_heading`），只有部分界面会跟随；
