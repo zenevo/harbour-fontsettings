@@ -163,8 +163,7 @@ Page {
             Label {
                 x: Theme.horizontalPageMargin
                 width: parent.width - 2 * Theme.horizontalPageMargin
-                text: qsTr("改动会写入 ~/.config/fontconfig/fonts.conf 并替换 Sailfish UI 使用的 "
-                           "「Sail Sans Pro Light」，重启主屏幕后生效。只影响本用户，不修改系统文件。")
+                text: qsTr("改动会写入 ~/.config/fontconfig/fonts.conf 并替换 Sailfish UI 使用的「Sail Sans Pro Light」，重启主屏幕后生效。只影响本用户，不修改系统文件。")
                 color: Theme.secondaryColor
                 wrapMode: Text.Wrap
                 font.pixelSize: Theme.fontSizeExtraSmall

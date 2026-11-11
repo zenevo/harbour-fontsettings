@@ -5,6 +5,8 @@
 #include <QQuickView>
 #include <QScopedPointer>
 #include <QUrl>
+#include <QDebug>
+#include <QQmlError>
 
 #include "fontbackend.h"
 
@@ -23,7 +25,14 @@ int main(int argc, char *argv[])
     FontBackend backend;
     view->rootContext()->setContextProperty("backend", &backend);
 
-    view->setSource(SailfishApp::pathTo("qml/main.qml"));
+    const QUrl source = SailfishApp::pathTo("qml/main.qml");
+    QObject::connect(view.data(), &QQuickView::statusChanged,
+                     [](QQuickView::Status status) {
+        qWarning() << "harbour-fontsettings: view status" << int(status);
+    });
+    view->setSource(source);
+    for (const QQmlError &error : view->errors())
+        qWarning() << "harbour-fontsettings: QML error:" << error.toString();
     view->show();
 
     return app->exec();
