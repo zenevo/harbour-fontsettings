@@ -6,4 +6,7 @@ Comment=Change the Sailfish UI font, import fonts and manage fallbacks
 Comment[zh_CN]=更换系统字体、导入字体、管理回退字体
 Icon=harbour-fontsettings
 Exec=harbour-fontsettings
-X-Nemo-Application-Type=silica-qt5
+X-Nemo-Application-Type=generic
+
+[X-Sailjail]
+Sandboxing=Disabled
