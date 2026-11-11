@@ -488,7 +488,7 @@ int FontBackend::runCli(const QStringList &args)
             return 2;
         }
         const bool ok = importFont(rest.first());
-        out << message() << "\n";
+        out << lastMessage() << "\n";
         return ok ? 0 : 1;
     }
 
@@ -503,13 +503,13 @@ int FontBackend::runCli(const QStringList &args)
             else { err << "unknown option: " << opt << "\n"; return 2; }
         }
         const bool ok = apply();
-        out << message() << "\n";
+        out << lastMessage() << "\n";
         return ok ? 0 : 1;
     }
 
     if (cmd == QLatin1String("reset")) {
         const bool ok = reset();
-        out << message() << "\n";
+        out << lastMessage() << "\n";
         return ok ? 0 : 1;
     }
 

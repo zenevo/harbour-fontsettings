@@ -27,6 +27,8 @@ make %{?_smp_mflags}
 make install INSTALL_ROOT=%{buildroot}
 mkdir -p %{buildroot}/usr/share/harbour-fontsettings/qml
 cp -r qml/* %{buildroot}/usr/share/harbour-fontsettings/qml/
+find %{buildroot}/usr/share/harbour-fontsettings -type d -exec chmod 755 {} +
+find %{buildroot}/usr/share/harbour-fontsettings -type f -exec chmod 644 {} +
 install -D -m 644 data/harbour-fontsettings.desktop \
     %{buildroot}/usr/share/applications/harbour-fontsettings.desktop
 for s in 86 108 128 172 256; do
