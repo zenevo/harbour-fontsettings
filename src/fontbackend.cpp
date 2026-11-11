@@ -271,7 +271,7 @@ QString FontBackend::buildConfig() const
     s.setCodec("UTF-8");
     s << "<?xml version=\"1.0\"?>\n"
          "<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n"
-         "<!-- " << kMarker << " — 由「字体设置」生成，修改会被覆盖 -->\n"
+         "<!-- " << kMarker << QStringLiteral(" — 由「字体设置」生成，修改会被覆盖") << " -->\n"
          "<fontconfig>\n";
 
     auto writeAlias = [&s](const QString &target, const QStringList &families) {
