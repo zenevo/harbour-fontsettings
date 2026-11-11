@@ -1,5 +1,5 @@
 Name:       harbour-fontsettings
-Version:    0.2.2
+Version:    0.2.3
 Release:    1
 Summary:    Font manager for Sailfish OS
 License:    MIT
@@ -35,8 +35,6 @@ for s in 86 108 128 172 256; do
     install -D -m 644 icons/harbour-fontsettings-$s.png \
         %{buildroot}/usr/share/icons/hicolor/${s}x${s}/apps/harbour-fontsettings.png
 done
-install -D -m 644 icons/harbour-fontsettings.svg \
-    %{buildroot}/usr/share/icons/hicolor/scalable/apps/harbour-fontsettings.svg
 
 %files
 /usr/bin/harbour-fontsettings
@@ -45,6 +43,8 @@ install -D -m 644 icons/harbour-fontsettings.svg \
 /usr/share/icons/hicolor/*/apps/harbour-fontsettings.*
 
 %changelog
+* Wed Nov 11 2026 zen <zen@localhost> - 0.2.3-1
+- Icon built directly from the stock plate alpha, recoloured with the gradient
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.2-1
 - Icon silhouette matched to the stock Sailfish people icon
 * Wed Nov 11 2026 zen <zen@localhost> - 0.2.1-1
